@@ -1,0 +1,644 @@
+Отличный выбор! **TF-IDF** — это мощная и понятная техника для поиска и анализа текстов. Давайте разберем **с нуля**, с примерами на Dart для вашего приложения регламентов.
+
+## 📚 **Что такое TF-IDF? Простыми словами**
+
+**TF-IDF (Term Frequency-Inverse Document Frequency)** — это статистическая мера, которая показывает **важность слова в документе относительно коллекции документов**.
+
+### **Аналогия:**
+Представьте библиотеку с книгами:
+- **TF (частота термина)** — как часто слово встречается в **одной книге**
+- **IDF (обратная частота документа)** — насколько слово **редкое во всей библиотеке**
+- **TF-IDF** = TF × IDF — высокая, если слово часто в этой книге, но редко в других
+
+---
+
+## 🧮 **Математика TF-IDF (простая версия)**
+
+### **TF (Term Frequency)**
+```
+tf(t, d) = (количество раз t встречается в d) / (общее количество слов в d)
+```
+
+### **IDF (Inverse Document Frequency)**
+```
+idf(t, D) = log(общее количество документов / (1 + количество документов, содержащих t))
+```
+
+### **TF-IDF**
+```
+tfidf(t, d, D) = tf(t, d) × idf(t, D)
+```
+
+---
+
+## 💻 **Реализация TF-IDF на Dart с нуля**
+
+### **1. Базовая реализация для поиска в регламентах**
+
+```dart
+import 'dart:math';
+
+class TFIDF {
+  // Документы для поиска (ваши регламенты)
+  final List<String> documents;
+  
+  TFIDF(this.documents);
+  
+  // 1. Предобработка текста
+  List<String> _preprocess(String text) {
+    return text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^\w\s]'), '') // Удаляем пунктуацию
+        .split(' ')
+        .where((word) => word.length > 2) // Игнорируем короткие слова
+        .toList();
+  }
+  
+  // 2. Вычисляем TF (Term Frequency)
+  Map<String, double> _calculateTF(String document) {
+    final words = _preprocess(document);
+    final totalWords = words.length.toDouble();
+    final tf = <String, double>{};
+    
+    // Считаем частоту каждого слова
+    for (final word in words) {
+      tf[word] = (tf[word] ?? 0) + 1;
+    }
+    
+    // Нормализуем (делим на общее количество слов)
+    for (final word in tf.keys) {
+      tf[word] = tf[word]! / totalWords;
+    }
+    
+    return tf;
+  }
+  
+  // 3. Вычисляем IDF (Inverse Document Frequency)
+  Map<String, double> _calculateIDF() {
+    final idf = <String, double>{};
+    final totalDocs = documents.length.toDouble();
+    
+    // Считаем в скольких документах встречается каждое слово
+    final docContainsWord = <String, int>{};
+    
+    for (final doc in documents) {
+      final uniqueWords = _preprocess(doc).toSet();
+      for (final word in uniqueWords) {
+        docContainsWord[word] = (docContainsWord[word] ?? 0) + 1;
+      }
+    }
+    
+    // Вычисляем IDF для каждого слова
+    for (final word in docContainsWord.keys) {
+      idf[word] = log(totalDocs / (1 + docContainsWord[word]!));
+    }
+    
+    return idf;
+  }
+  
+  // 4. Вычисляем TF-IDF для всех документов
+  List<Map<String, Map<String, double>>> calculateTFIDF() {
+    final idf = _calculateIDF();
+    final results = <Map<String, Map<String, double>>>[];
+    
+    for (final doc in documents) {
+      final tf = _calculateTF(doc);
+      final tfidf = <String, double>{};
+      
+      for (final word in tf.keys) {
+        // Если слова нет в IDF (редкий случай), пропускаем
+        if (idf.containsKey(word)) {
+          tfidf[word] = tf[word]! * idf[word]!;
+        }
+      }
+      
+      results.add({doc: tfidf});
+    }
+    
+    return results;
+  }
+  
+  // 5. Поиск документов по запросу
+  List<Map<String, double>> search(String query) {
+    final queryWords = _preprocess(query).toSet();
+    final idf = _calculateIDF();
+    final scores = <int, double>{}; // Индекс документа -> релевантность
+    
+    for (int i = 0; i < documents.length; i++) {
+      final doc = documents[i];
+      final tf = _calculateTF(doc);
+      double score = 0;
+      
+      for (final word in queryWords) {
+        if (tf.containsKey(word) && idf.containsKey(word)) {
+          score += tf[word]! * idf[word]!;
+        }
+      }
+      
+      scores[i] = score;
+    }
+    
+    // Сортируем по убыванию релевантности
+    final sortedEntries = scores.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    // Возвращаем документы с их скором
+    return sortedEntries.map((entry) {
+      return {documents[entry.key]: entry.value};
+    }).toList();
+  }
+}
+```
+
+### **2. Пример использования в приложении регламентов**
+
+```dart
+void main() {
+  // Пример регламентов из вашего приложения
+  final regulations = [
+    'Порядок оформления ежегодного отпуска сотрудников компании',
+    'Инструкция по составлению квартального финансового отчета',
+    'Регламент проведения совещаний и планёрок',
+    'Правила оформления командировочных расходов и авансовых отчетов',
+    'Инструкция по технике безопасности на рабочем месте',
+  ];
+  
+  final tfidf = TFIDF(regulations);
+  
+  // Тестируем поиск
+  print('=== ПОИСК РЕГЛАМЕНТОВ С TF-IDF ===\n');
+  
+  // Поиск по запросу
+  final query = 'оформление отчета';
+  print('Запрос: "$query"\n');
+  
+  final results = tfidf.search(query);
+  
+  print('Результаты поиска:');
+  for (final result in results) {
+    result.forEach((doc, score) {
+      if (score > 0) {
+        print('• ${doc.substring(0, 50)}... (релевантность: ${score.toStringAsFixed(3)})');
+      }
+    });
+  }
+  
+  // Покажем матрицу TF-IDF для анализа
+  print('\n=== TF-IDF МАТРИЦА ===');
+  final tfidfMatrix = tfidf.calculateTFIDF();
+  
+  for (final docMap in tfidfMatrix) {
+    docMap.forEach((doc, wordScores) {
+      print('\nДокумент: ${doc.substring(0, 30)}...');
+      
+      // Топ-5 самых важных слов
+      final topWords = wordScores.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value))
+        ..take(5);
+      
+      for (final entry in topWords) {
+        print('  "${entry.key}": ${entry.value.toStringAsFixed(4)}');
+      }
+    });
+  }
+}
+```
+
+---
+
+## 🔧 **Улучшенная версия с кэшированием для production**
+
+```dart
+import 'dart:math';
+import 'dart:collection';
+
+class AdvancedTFIDF {
+  final List<String> _documents;
+  late final List<List<String>> _processedDocs;
+  late final Map<String, double> _idfCache;
+  late final List<Map<String, double>> _tfCache;
+  
+  AdvancedTFIDF(List<String> documents) : _documents = documents {
+    _preprocessAll();
+    _calculateIDF();
+  }
+  
+  // Быстрая предобработка всех документов
+  void _preprocessAll() {
+    _processedDocs = _documents.map(_tokenize).toList();
+    _tfCache = List.generate(_documents.length, (i) => _calculateTF(i));
+  }
+  
+  List<String> _tokenize(String text) {
+    return text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^\w\sа-яА-ЯёЁ]'), ' ') // Поддержка русского
+        .split(RegExp(r'\s+'))
+        .where((word) => word.length > 2)
+        .toList();
+  }
+  
+  Map<String, double> _calculateTF(int docIndex) {
+    final words = _processedDocs[docIndex];
+    final tf = HashMap<String, double>();
+    
+    if (words.isEmpty) return tf;
+    
+    for (final word in words) {
+      tf[word] = (tf[word] ?? 0) + 1;
+    }
+    
+    final totalWords = words.length.toDouble();
+    for (final word in tf.keys) {
+      tf[word] = tf[word]! / totalWords;
+    }
+    
+    return tf;
+  }
+  
+  void _calculateIDF() {
+    final docFreq = HashMap<String, int>();
+    _idfCache = HashMap();
+    
+    // Считаем document frequency
+    for (final words in _processedDocs) {
+      final uniqueWords = words.toSet();
+      for (final word in uniqueWords) {
+        docFreq[word] = (docFreq[word] ?? 0) + 1;
+      }
+    }
+    
+    // Вычисляем IDF
+    final totalDocs = _documents.length.toDouble();
+    for (final entry in docFreq.entries) {
+      _idfCache[entry.key] = log(totalDocs / entry.value);
+    }
+  }
+  
+  // Поиск с учетом синонимов и морфологии (упрощенно)
+  List<SearchResult> search(String query,
+      {bool useCosineSimilarity = true}) {
+    
+    final queryWords = _expandQuery(_tokenize(query));
+    final scores = List<double>.filled(_documents.length, 0.0);
+    
+    for (int i = 0; i < _documents.length; i++) {
+      scores[i] = useCosineSimilarity
+          ? _cosineSimilarity(queryWords, i)
+          : _simpleScore(queryWords, i);
+    }
+    
+    // Собираем результаты
+    final results = <SearchResult>[];
+    for (int i = 0; i < scores.length; i++) {
+      if (scores[i] > 0) {
+        results.add(SearchResult(
+          document: _documents[i],
+          score: scores[i],
+          index: i,
+        ));
+      }
+    }
+    
+    results.sort((a, b) => b.score.compareTo(a.score));
+    return results;
+  }
+  
+  // Простой подсчет (сумма TF-IDF)
+  double _simpleScore(Set<String> queryWords, int docIndex) {
+    double score = 0;
+    final tf = _tfCache[docIndex];
+    
+    for (final word in queryWords) {
+      final tfValue = tf[word] ?? 0;
+      final idfValue = _idfCache[word] ?? 0;
+      score += tfValue * idfValue;
+    }
+    
+    return score;
+  }
+  
+  // Косинусная мера (более точная)
+  double _cosineSimilarity(Set<String> queryWords, int docIndex) {
+    // Вектор документа
+    final docVector = <String, double>{};
+    final tf = _tfCache[docIndex];
+    
+    for (final word in tf.keys) {
+      docVector[word] = tf[word]! * (_idfCache[word] ?? 0);
+    }
+    
+    // Вектор запроса
+    final queryVector = <String, double>{};
+    for (final word in queryWords) {
+      queryVector[word] = 1.0 * (_idfCache[word] ?? 0);
+    }
+    
+    // Косинусное сходство
+    double dotProduct = 0;
+    double docMagnitude = 0;
+    double queryMagnitude = 0;
+    
+    // Все уникальные слова из обоих векторов
+    final allWords = {...docVector.keys, ...queryVector.keys};
+    
+    for (final word in allWords) {
+      final docVal = docVector[word] ?? 0;
+      final queryVal = queryVector[word] ?? 0;
+      
+      dotProduct += docVal * queryVal;
+      docMagnitude += docVal * docVal;
+      queryMagnitude += queryVal * queryVal;
+    }
+    
+    if (docMagnitude == 0 || queryMagnitude == 0) return 0;
+    
+    return dotProduct / (sqrt(docMagnitude) * sqrt(queryMagnitude));
+  }
+  
+  // Простое расширение запроса (можно заменить на нормализацию)
+  Set<String> _expandQuery(List<String> words) {
+    final expanded = Set<String>.from(words);
+    
+    // Добавляем базовые синонимы
+    final synonyms = {
+      'отпуск': {'отпуск', 'отпуска', 'отдых'},
+      'отчет': {'отчет', 'отчета', 'отчеты', 'доклад'},
+      'совещание': {'совещание', 'встреча', 'планерка'},
+    };
+    
+    for (final word in words) {
+      if (synonyms.containsKey(word)) {
+        expanded.addAll(synonyms[word]!);
+      }
+    }
+    
+    return expanded;
+  }
+  
+  // Показать важные слова в документе
+  Map<String, double> getTopKeywords(int docIndex, {int topN = 10}) {
+    final tfidf = <String, double>{};
+    final tf = _tfCache[docIndex];
+    
+    for (final word in tf.keys) {
+      tfidf[word] = tf[word]! * (_idfCache[word] ?? 0);
+    }
+    
+    final sortedEntries = tfidf.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    return Map.fromEntries(sortedEntries.take(topN));
+  }
+}
+
+class SearchResult {
+  final String document;
+  final double score;
+  final int index;
+  
+  SearchResult({
+    required this.document,
+    required this.score,
+    required this.index,
+  });
+}
+```
+
+---
+
+## 🎯 **Интеграция TF-IDF в ваше приложение Flutter**
+
+```dart
+import 'package:flutter/material.dart';
+
+class TFIDFSearchScreen extends StatefulWidget {
+  final List<String> regulations;
+  
+  TFIDFSearchScreen({required this.regulations});
+  
+  @override
+  _TFIDFSearchScreenState createState() => _TFIDFSearchScreenState();
+}
+
+class _TFIDFSearchScreenState extends State<TFIDFSearchScreen> {
+  late AdvancedTFIDF tfidf;
+  final TextEditingController _controller = TextEditingController();
+  List<SearchResult> _results = [];
+  bool _isSearching = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    // Инициализация TF-IDF (может занять время)
+    _initTFIDF();
+  }
+  
+  Future<void> _initTFIDF() async {
+    // В фоновом потоке, чтобы не блокировать UI
+    await Future.microtask(() {
+      tfidf = AdvancedTFIDF(widget.regulations);
+    });
+  }
+  
+  void _search(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _results = [];
+      });
+      return;
+    }
+    
+    setState(() {
+      _isSearching = true;
+    });
+    
+    // Поиск в отдельном Isolate для больших коллекций
+    final results = await compute<String, List<SearchResult>>(
+      _performSearch,
+      query,
+    );
+    
+    setState(() {
+      _results = results;
+      _isSearching = false;
+    });
+  }
+  
+  // Функция для compute (должна быть статической)
+  static List<SearchResult> _performSearch(String query) {
+    // Здесь нужно передать tfidf, но для примера упростим
+    return [];
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Умный поиск регламентов (TF-IDF)'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                labelText: 'Введите запрос',
+                hintText: 'например: оформление отчета отпуск',
+                suffixIcon: _controller.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _controller.clear();
+                          _search('');
+                        },
+                      )
+                    : null,
+              ),
+              onChanged: _search,
+            ),
+          ),
+          if (_isSearching)
+            LinearProgressIndicator()
+          else if (_results.isEmpty && _controller.text.isNotEmpty)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search_off, size: 60, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text('Ничего не найдено'),
+                  ],
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: _results.length,
+                itemBuilder: (context, index) {
+                  final result = _results[index];
+                  return _buildResultCard(result);
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildResultCard(SearchResult result) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ListTile(
+        title: Text(
+          result.document,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 4),
+            LinearProgressIndicator(
+              value: result.score.clamp(0.0, 1.0),
+              backgroundColor: Colors.grey[200],
+            ),
+            SizedBox(height: 4),
+            Text(
+              'Релевантность: ${(result.score * 100).toStringAsFixed(1)}%',
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+        trailing: Chip(
+          label: Text('TF-IDF'),
+          backgroundColor: Colors.blue[50],
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
+## 📊 **Визуализация TF-IDF для понимания**
+
+```dart
+// Вспомогательный класс для визуализации
+void visualizeTFIDF(AdvancedTFIDF tfidf, int docIndex) {
+  print('\n📊 ВИЗУАЛИЗАЦИЯ TF-IDF ДЛЯ ДОКУМЕНТА $docIndex');
+  print('=' * 50);
+  
+  final keywords = tfidf.getTopKeywords(docIndex, topN: 15);
+  
+  print('\nТоп-15 ключевых слов:');
+  print('━' * 30);
+  
+  keywords.forEach((word, score) {
+    final barLength = (score * 50).round();
+    final bar = '█' * barLength;
+    print('${word.padRight(15)} $bar ${score.toStringAsFixed(4)}');
+  });
+  
+  print('\n💡 Интерпретация:');
+  print('• Чем длиннее полоса, тем важнее слово в документе');
+  print('• Высокий TF-IDF = слово часто в этом документе, но редко в других');
+  print('• Низкий TF-IDF = слово или редкое, или встречается везде');
+}
+```
+
+---
+
+## 🎓 **Упражнения для закрепления:**
+
+### **Задание 1: Реализуйте сами**
+```dart
+// 1. Создайте класс SimpleTFIDF с методами:
+//    - tf(term, document) → double
+//    - idf(term, allDocuments) → double
+//    - tfidf(term, document, allDocuments) → double
+
+// 2. Протестируйте на данных:
+final documents = [
+  'кот собака мышка',
+  'кот кот кот',
+  'собака собака волк',
+];
+
+// 3. Вычислите TF-IDF для слова "кот" в каждом документе
+```
+
+### **Задание 2: Улучшите поиск**
+```dart
+// Добавьте в поиск:
+// 1. Учет стоп-слов (и, в, на, по, для)
+// 2. Нормализацию слов (отчет → отчеты, отчета)
+// 3. Поиск по фразам (не только отдельным словам)
+```
+
+---
+
+## 📈 **Когда использовать TF-IDF в вашем приложении:**
+
+### **✅ Хорошо подходит для:**
+1. Поиска релевантных регламентов по текстовому запросу
+2. Автоматического тегирования документов (по ключевым словам)
+3. Похожих документов (сравнение TF-IDF векторов)
+4. Анализа: какие темы чаще всего встречаются
+
+### **❌ Не подходит для:**
+1. Синонимов (отпуск ≠ отгул) → нужны word embeddings
+2. Смыслового поиска (поиск по смыслу, а не словам)
+3. Очень маленьких коллекций (<10 документов)
+
+### **💡 Советы для вашего проекта:**
+1. Начните с простой реализации
+2. Кэшируйте результаты (IDF меняется редко)
+3. Добавьте прогресс-бар при индексации
+4. Для русского языка добавьте стоп-слова и простую нормализацию
+
+TF-IDF — это отличный баланс между простотой и эффективностью. Для вашего приложения регламентов это будет работать лучше, чем обычный `contains()`, особенно когда документов станет много (50+).
