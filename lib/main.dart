@@ -12,13 +12,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Regulations of Some Company',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color(0xFFC8102E),
-        primarySwatch: Colors.red,
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFC8102E),
+debugShowCheckedModeBanner: false,
+theme: ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: const Color.fromARGB(255, 28, 200, 16),
+  ),
+  primaryColor: const Color.fromARGB(255, 28, 200, 16),
+  useMaterial3: true,
+  appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 41, 200, 16),
           foregroundColor: Colors.white,
         ),
         cardTheme: CardThemeData(

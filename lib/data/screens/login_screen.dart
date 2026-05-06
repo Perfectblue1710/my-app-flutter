@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 16, 200, 41), 
+                    backgroundColor: const Color.fromARGB(255, 154, 200, 16), 
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                     );
                   },
                   child: const Text(
-                    'Войти',
+                    'Login',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,

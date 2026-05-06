@@ -24,10 +24,10 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
         isExpanded: true,
         children: [
           DocumentNode(
-            title: 'Правила в лесозаготовительном, деревообрабатывающем производствах и при выполнении лесохозяйственных работ',
+            title: 'Rules',
             isFile: true,
-            filePath: 'assets/regulations/foster_rules_1.pdf',
-            documentType: 'Приказ',
+            filePath: 'assets/regulations/reg_(2).pdf',
+            documentType: 'Ord',
             date: '23.09.2020',
           ),
         ],
@@ -44,7 +44,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
                 title: 'По оказанию первой помощи при несчастных случаях на производстве',
                 isFile: true,
                 filePath: 'assets/insrtuctions/instruction_1.pdf',
-                documentType: 'Инструкция В 2-01',
+                documentType: 'Ins',
                 date: '29.08.2024',
               ),
             ],
@@ -54,10 +54,10 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
             isExpanded: true,
             children: [
               DocumentNode(
-                title: 'Для слесаря по ремонту технологических установок',
+                title: '',
                 isFile: true,
                 filePath: 'assets/instructions_prof/ins_pro_1.pdf',
-                documentType: 'Инструкция ИОТ П-1-01',
+                documentType: 'Ins oth',
               ),
             ],
           ),
@@ -74,10 +74,10 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
         isExpanded: true,
         children: [
           DocumentNode(
-            title: 'О создании коммиссии по обследованию ТПА БУ на предмет их ремонтопригодности',
+            title: 'Order 1',
             isFile: true,
             filePath: 'assets/prikaz_gas/prikaz_(2)',
-            documentType: 'Приказ П-398К',
+            documentType: 'Ord',
             date:'28.11.2023',
           ),
         ],
@@ -87,10 +87,10 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
         isExpanded: true,
         children: [
           DocumentNode(
-            title: 'Специалист по охране труда 1 категории',
+            title: 'Instruction 1',
             isFile: true,
-            filePath: 'assets/ins_gas/ins_(1)',
-            documentType: 'Инструкция №54-03-13-4.2-19к',
+            filePath: 'assets/ins_gas/ins_ (1)',
+            documentType: 'Ins',
             date: '20.02.2025',
           ),
         ],
@@ -100,10 +100,10 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
         isExpanded: true,
         children: [
           DocumentNode(
-            title: 'Взаимоотношений между Подрядчиком по бурению и Подрядчиком по освоению по передаче скважин из бурения в освоение',
+            title: 'Regulation for..',
             isFile: true,
             filePath: 'assets/reg_gas/reg_(1)',
-            documentType: 'Регламент № П-191А',
+            documentType: 'Reg',
             date: '15.04.2024',
           ),
         ],
@@ -513,7 +513,7 @@ class DocumentNode {
     this.isExpanded = false,
     this.isFile = false,
     this.filePath = '',
-    this.documentType = 'Документ',
+    this.documentType = 'Document',
     this.date = '',
     this.children = const [],
   }); 

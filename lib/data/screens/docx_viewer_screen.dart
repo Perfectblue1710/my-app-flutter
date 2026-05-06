@@ -20,7 +20,7 @@ class DocxViewerScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.download),
             onPressed: () {
-              // Скачать документ
+
             },
           ),
           IconButton(

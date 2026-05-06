@@ -11,7 +11,7 @@ class DataLoader {
       return RegulationsDataset.fromJson(jsonData);
     } catch (e) {
       print('Error loading JSON: $e');
-      // Возвращаем пустой датасет в случае ошибки
+
       return RegulationsDataset(
         version: '1.0',
         lastUpdated: DateTime.now().toIso8601String(),
