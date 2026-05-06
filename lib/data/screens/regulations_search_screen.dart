@@ -41,7 +41,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
             isExpanded: true,
             children: [
               DocumentNode(
-                title: 'По оказанию первой помощи при несчастных случаях на производстве',
+                title: 'instructions 2',
                 isFile: true,
                 filePath: 'assets/insrtuctions/instruction_1.pdf',
                 documentType: 'Ins',
@@ -54,7 +54,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
             isExpanded: true,
             children: [
               DocumentNode(
-                title: '',
+                title: 'Instruction other',
                 isFile: true,
                 filePath: 'assets/instructions_prof/ins_pro_1.pdf',
                 documentType: 'Ins oth',
@@ -120,7 +120,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
       // ===== FAB =====
       floatingActionButton: FloatingActionButton(
         onPressed: _importDocument,
-        backgroundColor: const Color(0xFFC8102E),
+        backgroundColor: const Color.fromARGB(255, 16, 200, 102),
         child: const Icon(Icons.add, color: Colors.white),
       ),
 
@@ -128,7 +128,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
         children: [
           // ===== ШАПКА =====
           Container(
-            color: const Color(0xFFC8102E),
+            color: const Color.fromARGB(255, 16, 200, 74),
             padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
             child: Column(
               children: [
@@ -138,17 +138,6 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
                     IconButton(
                       icon: const Icon(Icons.menu, color: Colors.white),
                       onPressed: _openMenu,
-                    ),
-                    const Expanded(
-                      child: Text(
-                        'ПОИСК',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.filter_list, color: Colors.white),
@@ -168,7 +157,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Поиск документов...',
+                      hintText: 'Search documents',
                       prefixIcon: const Icon(Icons.search),
                       border: InputBorder.none,
                       suffixIcon: _searchQuery.isNotEmpty
@@ -222,11 +211,11 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
           const SizedBox(height: 16),
           Text(
             _searchQuery.isEmpty
-                ? 'Добавьте первый документ'
-                : 'По запросу "$_searchQuery" ничего не найдено',
+                ? 'Add first document'
+                : 'Undefined "$_searchQuery"',
             style: const TextStyle(
               fontSize: 18,
-              color: Colors.grey,
+              color: Color.fromARGB(255, 176, 218, 186),
             ),
             textAlign: TextAlign.center,
           ),
@@ -239,7 +228,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
                   _searchController.clear();
                 });
               },
-              child: const Text('Очистить поиск'),
+              child: const Text('Delete'),
             ),
         ],
       ),
@@ -256,7 +245,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.file_upload),
-              title: const Text('Загрузить DOCX файл'),
+              title: const Text('Download DOCX file'),
               onTap: () async {
                 Navigator.pop(context);
                 await _pickDocxFile();
@@ -264,18 +253,18 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.folder_open),
-              title: const Text('Импорт из папки документов'),
+              title: const Text('Import from folder'),
               onTap: () {
                 Navigator.pop(context);
-                _showStub('Импорт из папки');
+                _showStub('Import from folder');
               },
             ),
             ListTile(
               leading: const Icon(Icons.cloud_upload),
-              title: const Text('Скачать из облачного хранилища'),
+              title: const Text('Download from cloud server'),
               onTap: () {
                 Navigator.pop(context);
-                _showStub('Облачный импорт');
+                _showStub('Cloud server');
               },
             ),
           ],
@@ -287,20 +276,20 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
   // ===== ВЫБОР DOCX ФАЙЛА =====
   Future<void> _pickDocxFile() async {
 
-    _showStub('Выбор DOCX файла');
+    _showStub('Choose DOCX-file');
   }
 
   // ===== МЕНЮ =====
   void _openMenu() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Меню / настройки')),
+      const SnackBar(content: Text('Menu/settings')),
     );
   }
 
   // ===== ФИЛЬТРЫ =====
   void _openFilters() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Фильтры документов')),
+      const SnackBar(content: Text('Filters documents')),
     );
   }
 
@@ -308,7 +297,7 @@ class _RegulationsSearchScreenState extends State<RegulationsSearchScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(text),
-        backgroundColor: const Color(0xFFC8102E),
+        backgroundColor: const Color.fromARGB(255, 16, 200, 93),
       ),
     );
   }
@@ -361,7 +350,7 @@ Widget _buildTreeNode(DocumentNode node) {
             decoration: BoxDecoration(
               color: node.isFile
                   ? _getDocumentTypeColor(node.documentType)
-                  : const Color(0xFFC8102E),
+                  : const Color.fromARGB(255, 16, 200, 53),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -406,7 +395,7 @@ Widget _buildTreeNode(DocumentNode node) {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: const Color.fromARGB(255, 209, 255, 203),
                             ),
                           ),
                         ),
@@ -421,7 +410,7 @@ Widget _buildTreeNode(DocumentNode node) {
                       node.isExpanded
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
-                      color: const Color(0xFFC8102E),
+                      color: const Color.fromARGB(255, 130, 212, 89),
                     ),
                     onPressed: () {
                       setState(() {
@@ -459,7 +448,7 @@ Widget _buildTreeNode(DocumentNode node) {
   // ===== ОТКРЫТИЕ ДОКУМЕНТА =====
   void _openDocument(DocumentNode node) {
     if (node.filePath.isEmpty) {
-      _showStub('Файл не найден: ${node.title}');
+      _showStub('File undefined: ${node.title}');
       return;
     }
 
@@ -482,18 +471,16 @@ MaterialPageRoute(
   // ===== ЦВЕТ ДЛЯ ТИПА ДОКУМЕНТА =====
   Color _getDocumentTypeColor(String type) {
     switch (type) {
-      case 'Приказ':
-        return Colors.red[700]!;
-      case 'Инструкция':
+      case 'Order':
+        return const Color.fromARGB(255, 47, 211, 211)!;
+      case 'Instructions':
         return Colors.blue[700]!;
-      case 'Регламент':
+      case 'Regulations':
         return Colors.green[700]!;
-      case 'Руководство':
-        return Colors.purple[700]!;
-      case 'Прочее':
-        return Colors.orange[700]!;
+      case 'Other':
+        return const Color.fromARGB(255, 126, 140, 245)!;
       default:
-        return const Color(0xFFC8102E);
+        return const Color.fromARGB(255, 31, 200, 16);
     }
   }
 }

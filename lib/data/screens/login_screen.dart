@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
 
               // ЗАГОЛОВОК
               const Text(
-                'Регистрация',
+                'Hello',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
