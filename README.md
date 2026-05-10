@@ -28,11 +28,15 @@ bash
 flutter clean
 flutter pub get
 flutter run
-## Скриншоты
+## 📱 Скриншоты
 
-| Главный экран | Список документов | Просмотр документа | Меню | Поиск | Дополнительно |
-|-------------------|----------------------|-----------------------|
-| ![Главный экран](screenshots/screen_login.png) | ![Список документов](screenshots/screen_home.png) | ![Просмотр](screenshots/screen_pdfviewer.png) | [Меню](screenshots/screen_menu.png) | ![Поиск](screenshots/screen_search.png) | ![Дополнительно](screenshots/screen_plus.png)
+| Вход | Список документов | Просмотр PDF |
+|------|------------------|--------------|
+| ![Вход](screenshots/screen_login.png) | ![Список документов](screenshots/screen_home.png) | ![Просмотр PDF](screenshots/screen_pdfviewer.png) |
+
+| Меню | Поиск | Дополнительно |
+|------|-------|---------------|
+| ![Меню](screenshots/screen_menu.png) | ![Поиск](screenshots/screen_search.png) | ![Дополнительно](screenshots/screen_plus.png) |
 
 ---
 
