@@ -1,33 +1,35 @@
 ## Сборка и запуск
 ### Требования
-Flutter (последняя стабильная версия) — [инструкция по установке](https://docs.flutter.dev/install)
-
-Android Studio / VS Code (с плагинами Flutter и Dart)
-Для Android: Android SDK
+- Flutter (последняя стабильная версия) — [инструкция по установке](https://docs.flutter.dev/install)
+- Android Studio / VS Code (с плагинами Flutter и Dart)
+- Для Android: Android SDK
 
 ## Шаг 1. Клонирование репозитория
-bash
+```bash
 git clone https://github.com/Perfectblue1710/my-app-flutter.git
 cd my-app-flutter
+```
 ## Шаг 2. Установка зависимостей
-bash
+```bash
 flutter pub get
+```
 ## Шаг 3. Запуск (отладка)
-Подключите устройство (эмулятор или реальный телефон) и выполните:
+```Подключите устройство (эмулятор или реальный телефон) и выполните:
 bash
 flutter run
+```
 ## Шаг 4. Сборка установочного файла
-Платформа	Команда	Результат
+```Платформа	Команда	Результат
 Android (APK)	flutter build apk	build/app/outputs/flutter-apk/app-release.apk
 Android (AAB для Google Play)	flutter build appbundle	build/app/outputs/bundle/release/app-release.aab
-iOS (только macOS)	flutter build ios	/build/ios/iphoneos/Runner.app
-Web	flutter build web	Папка build/web/
+```
 ## Шаг 5. Очистка проекта
 Если возникли проблемы с кэшем:
-bash
+```bash
 flutter clean
 flutter pub get
-flutter run
+flutter run 
+```
 ## 📱 Скриншоты
 
 | Вход | Список документов | Просмотр PDF |
