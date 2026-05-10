@@ -40,6 +40,9 @@ flutter run
 |------|-------|---------------|
 | ![Меню](screenshots/screen_menu.png) | ![Поиск](screenshots/screen_search.png) | ![Дополнительно](screenshots/screen_plus.png) |
 
+## О конфиденциальности
+>Исходное приложение работало с реальными документами компании. В данном репозитории представлена **демо-версия** с фейковыми (заглушечными) файлами и анонимизированными данными. Архитектура, логика и UI сохранены полностью.
+
 ---
 
 ## Build & Run
@@ -88,7 +91,7 @@ flutter run
 
 ---
 
-## 🔒 Confidentiality Note
+## Confidentiality Note
 
 > The original application worked with real company documents. **This repository contains a demo version** with mock/fake files and anonymized data. The architecture, logic, and UI are fully preserved.
 
