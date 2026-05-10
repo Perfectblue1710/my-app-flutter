@@ -29,10 +29,14 @@ flutter clean
 flutter pub get
 flutter run
 
+## 📱 Screenshots
+
+| Главный экран | Список документов | Просмотр документа | Меню | Поиск | Дополнительно |
+|-------------------|----------------------|-----------------------|
+| ![Главный экран](screenshots/screen_login.png) | ![Список документов](screenshots/screen_home.png) | ![Просмотр](screenshots/screen_pdfviewer.png) | [Меню](screenshots/screen_menu.png) | ![Поиск](screenshots/screen_search.png) | ![Дополнительно](screenshots/screen_plus.png)
+
 ## О конфиденциальности
 Исходное приложение работало с реальными документами компании. В данном репозитории представлена демо-версия с фейковыми (заглушечными) файлами и анонимизированными данными. Архитектура, логика и UI сохранены полностью.
-
-Отлично! Вот та же инструкция по сборке **на английском** — вставьте её в ваш README.md:
 
 ---
 
@@ -74,6 +78,11 @@ flutter clean
 flutter pub get
 flutter run
 ```
+## 📱 Screenshots
+
+| Login Screen | Documents List | PDF Viewer | Menu | Search | More |
+|--------------|----------------|------------|------|--------|------|
+| ![Login Screen](screenshots/screen_login.png) | ![Documents List](screenshots/screen_home.png) | ![PDF Viewer](screenshots/screen_pdfviewer.png) | ![Menu](screenshots/screen_menu.png) | ![Search](screenshots/screen_search.png) | ![More](screenshots/screen_plus.png) |
 
 ---
 
